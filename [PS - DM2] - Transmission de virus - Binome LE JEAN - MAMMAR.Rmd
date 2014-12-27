@@ -62,7 +62,7 @@ set.seed(42)
 simulation1 <- function( N = 10, generateur_arete, nb_personnes_Infectées = 1) {
 
   graphe = generateur_sommet_malade(N = N, initInfecté = nb_personnes_Infectées)
-  nbSommetInfecté = 1;
+  nbSommetInfecté = nb_personnes_Infectées;
   T_N = 0;
 
   df = data.frame(Temps = c(T_N), nbInfecté = c(nbSommetInfecté))
@@ -155,14 +155,23 @@ gene_arete_ligne_tore <- function (N = 10) {
 
 
 ```{r}
-evolution_T_N <- function (simulateur = simulation1, generateur, pas=10, nbSamples=10, nbInfecté = 1) {
+evolution_T_N <- function (simulateur = simulation1, generateur, pas=10, nbSamples=10, nbInfecté = 1, coeff_pers_infecté = 0) {
   library(ggplot2)
   set.seed(42);
+  
+  #Fonction permettant de modifier la proportions de la population infectée
+  proportion = function () {
+    if (coeff_pers_infecté != 0) {
+      floor(Ni * coeff_pers_infecté)
+    } else {
+      nbInfecté
+    }
+  }
   
   df2 = data.frame(N = c(), T_N = c())
   for(samples in 1:nbSamples) {
     Ni = samples * pas
-    df2 = rbind(df2, data.frame(N = Ni, T_N = tail(simulateur(Ni, generateur, nbInfecté), 1)$Temps ))
+    df2 = rbind(df2, data.frame(N = Ni, T_N = tail(simulateur(Ni, generateur, proportion()), 1)$Temps ))
   }
   
   df2
@@ -172,7 +181,7 @@ evolution_T_N <- function (simulateur = simulation1, generateur, pas=10, nbSampl
 
 
 ```{r}
-courbe_epidemique <- function (simulteur=simulation1, generateur, N=100, , nbInfecté = 1) { 
+courbe_epidemique <- function (simulteur=simulation1, generateur, N=100, nbInfecté = 1) { 
   library(ggplot2)
   set.seed(42);
   
@@ -201,7 +210,7 @@ Ce qui confirme notre hyspothèse sur l'allure exponentielle de la courbe.
 
 La courbe épidemique :
 ```{r}
-courbe_epidemique(simulteur = simulation1, generateur = gene_arete_ligne, N = 500)
+courbe_epidemique(simulteur = simulation1, generateur = gene_arete_ligne, N = 200)
 ```
 
 Conlusion : La courbe épidémique est bien moins fulgurante que dans le cas du graphe complet. Ca se voit bien, et s'explique bien par le fait que tous les sommets sont de degrés au plus 2. On est tenté de dire qu'il s'agit d'une courbe logarithmique vu l'allure de la courbe a partir de zero. Il faudrait essayer avec un N > 100 afin d'en être plus sûr
@@ -220,6 +229,25 @@ La courbe épidemique :
 ```{r}
 courbe_epidemique(simulteur = simulation1, generateur = gene_arete_ligne_tore, N = 100)
 ```
+
+*Faisant varier le nombre de personnes infectées*
+
+```{r}
+library(gridExtra)
+library(ggplot2)
+
+g1 = evolution_T_N(simulateur = simulation1, generateur = gene_arete_ligne, pas = 10, nbSamples = 10, nbInfecté = 1 ) + ggtitle("1 personne infectée")
+
+g2 = evolution_T_N(simulateur = simulation1, generateur = gene_arete_ligne, pas = 10, nbSamples = 50, coeff_pers_infecté = 1/4 ) + ggtitle("1/4 de la popluation infectée")
+
+g3 = evolution_T_N(simulateur = simulation1, generateur = gene_arete_ligne, pas = 10, nbSamples = 50, coeff_pers_infecté = 1/2 ) + ggtitle("1/2 de la population infectée")
+
+g4 = evolution_T_N(simulateur = simulation1, generateur = gene_arete_ligne, pas = 10, nbSamples = 50, coeff_pers_infecté = 3/4 ) + ggtitle("3/4 de la population infectée")
+
+grid.arrange(g1, g2, g3, g4, ncol=2, nrow=2)
+```
+
+La principale remarque qui se degage de porte sur le temps de l'infection totale de la population qui decroit quand proportion de personne infectée augmente.
 
 
 2. Lorsque le graphe est une grille 2D : 
