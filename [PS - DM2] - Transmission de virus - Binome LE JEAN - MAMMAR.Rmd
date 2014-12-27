@@ -1,0 +1,98 @@
+---
+title: "Transmission de virus"
+output: html_document
+---
+
+Dans ce DM nous nous efforcerons cette fois-ci a fournir une description plus détailler de notre démarche suite a la remarque de Arnaud Legrand.
+
+1. Etudions Tn en fonction de N quand le graphe est complet : 
+
+Choix de representation de notre structure de graphe : 
+On souhaite tirer uniformément sur notre ensemble d'arêtes :
+  representation 1 : matrice d'adjacence contenant 1 ou 0 pour respectivement l'existence ou l'absence d'arête entre les sommets d'indice (i,j). A cela on ajoutera la representation 2 qui contiendra l'information de si un sommet est infecté ou non.
+  representation 2 : un simple tableau contenant 1 ou 0 si respectivement le sommet d'indice i est infecté ou non.
+
+Dans le cas d'un graphe comlet on opte pour la seconde representation car quelque soit le couple de sommet tiré il existe une forcément une arête les reliants. 
+
+```{r}
+#Cette fonction renvoie un tableau de sommets dont 1 sommet est infecté
+generateur_graphe <- function (N = 10) {
+  graphe = array(0, N)
+  premier_sommet_infecte = floor(runif(n = 1, min = 1, max = N+1))
+  graphe[premier_sommet_infecte] = 1;
+  graphe
+}
+
+generateur_graphe()
+
+arete = generateur_arete(3);
+x = arete[1];
+y = arete[2];
+x
+y
+arete
+```
+
+```{r}
+
+#Cette fonction tire uniformement une arete de notre graphe complet
+generateur_arete <- function (N = 10) {
+  arete = floor(runif(n = 2, min = 1, max = N+1))
+  arete
+}
+
+generateur_arete()
+
+```
+
+
+```{r}
+set.seed(42)
+
+#Lancement de la simulation
+simulation1 <- function( N = 10 ) {
+  graphe = generateur_graphe(N);
+  nbSommetInfecté = 1;
+  T_N = 0;
+  
+  while ( nbSommetInfecté < N ) {
+    arete = generateur_arete(N);
+    x = arete[1];
+    y = arete[2];
+
+    if ((graphe[x] == 1) || (graphe[y] == 1)) {
+      
+      #Si x et y ne sont pas tous les deux infectés
+      if (! ((graphe[x] == 1) && (graphe[y] == 1)) ) { 
+        nbSommetInfecté = nbSommetInfecté + 1;
+      }
+      graphe[x] = 1;
+      graphe[y] = 1;
+    }
+    
+    T_N = T_N + 1;
+  }
+  
+  T_N
+}
+
+
+df = data.frame(N = c(), T_N = c())
+for(samples in 1:10) {
+  Ni = samples * 100
+  df = rbind(df, data.frame(N = Ni, T_N = simulation1(Ni)))
+}
+
+#plot(df)
+ggplot(data=df, aes(x=N)) + geom_line(data=df,aes(y=T_N),color="red") + theme_bw()
+
+```
+
+Dans ce cas d'un graphe complet on peut remarquer que le temps nécessaire pour que toute la population soit infectée évolue grossièrement de façon linéaire par rapport a l'effectif de la population (jusqu'à N = 800)
+
+Comment expliquer la decroissence entre 800 et 900 ?
+
+2. Graphe ligne 1D et grille 2D
+
+Lorsque le graphe est une ligne :
+
