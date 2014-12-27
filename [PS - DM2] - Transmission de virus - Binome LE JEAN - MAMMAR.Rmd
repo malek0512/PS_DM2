@@ -25,12 +25,6 @@ generateur_graphe <- function (N = 10) {
 
 generateur_graphe()
 
-arete = generateur_arete(3);
-x = arete[1];
-y = arete[2];
-x
-y
-arete
 ```
 
 ```{r}
