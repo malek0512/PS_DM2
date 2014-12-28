@@ -273,8 +273,8 @@ gene_arete_grille <- function (N, M = N) {
   nbArete = 2*N*M - N - M
   nbSommet = N * M
   x = floor(runif(n = 1, min = 1, max = nbArete + 1))
-  
-  if ( x > ((N-1)*M)) {
+  print(x)
+  if ( x <= ((N-1)*M)) {
     #On est dans les arêtes horizontales
     y = x + 1
   } else {
@@ -289,9 +289,13 @@ gene_arete_grille <- function (N, M = N) {
 ```
 
 Simulation : 
-
+===============
 ```{r}
-#evolution_T_N(simulateur = simulation1, generateur = gene_arete_grille, pas = 10, nbSamples = 10)
+gene_arete_grille(3)
+```
+==============
+```{r}
+evolution_T_N(simulateur = simulation1, generateur = gene_arete_grille, pas = 10, nbSamples = 10)
 ```
 
 
