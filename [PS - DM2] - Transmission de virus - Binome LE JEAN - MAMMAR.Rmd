@@ -276,7 +276,7 @@ gene_arete_grille <- function (N, M = N) {
   
   if ( x > ((N-1)*M)) {
     #On est dans les arêtes horizontales
-    x = x + floor((x+1)/(N-1))
+    x = x + floor((x-1)/(N-1))
     y = x + 1
   } else {
     #On est dans les arêtes verticales
