@@ -294,6 +294,16 @@ Simulation :
 ```{r}
 gene_arete_grille(3)
 ```
+
+```{r}
+gene_arete_grille(3)
+df = data.frame(noArete =c(0,0), couple = c(0,0))
+for(i in 1:10) {
+  res = gene_arete_grille(3)
+  df = rbind(df, data.frame(noArete = c(res[3], 999), couple = c(res[1], res[2])))
+}
+df
+```
 ==============
 ```{r}
 evolution_T_N(simulateur = simulation1, generateur = gene_arete_grille, pas = 10, nbSamples = 10)
