@@ -103,7 +103,7 @@ for(samples in 1:10) {
 
 df2
 #plot(df)
-ggplot(data=df2, aes(x=N)) + geom_line(data=df2,aes(y=T_N),color="red") + theme_bw()
+ggplot(data=df2, aes(x=N)) + geom_line(data=df2,aes(y=T_N),color="red") + theme_bw() + ggtitle( label = "L'évolutions de $T_N$ en fonction de N - Generateur d'arête dans un graphe complet")
 ```
 
 Conclusion :
@@ -117,7 +117,7 @@ set.seed(42);
 
 N = 1000
 df = simulation1(N, gene_arete_complet)
-ggplot(data=df, aes(x=Temps)) + geom_line(data=df,aes(y=nbInfecté),color="red") + theme_bw()
+ggplot(data=df, aes(x=Temps)) + geom_line(data=df,aes(y=nbInfecté),color="red") + theme_bw() + ggtitle( label = "Courbe épidémique $T$ en fonction de N - Generateur d'arête dans un graphe complet")
 ```
 
 Conclusion:
@@ -153,7 +153,7 @@ gene_arete_ligne_tore <- function (N = 10) {
 }
 ```
 
-
+Nous définissons ces fonction auxiliares, afin d'éviter la répétition de code :
 ```{r}
 evolution_T_N <- function (simulateur = simulation1, generateur, pas=10, nbSamples=10, nbInfecté = 1, coeff_pers_infecté = 0) {
   library(ggplot2)
@@ -175,45 +175,51 @@ evolution_T_N <- function (simulateur = simulation1, generateur, pas=10, nbSampl
   }
   
   df2
-  ggplot(data=df2, aes(x=N)) + geom_line(data=df2,aes(y=T_N),color="red") + theme_bw()
+  ggplot(data=df2, aes(x=N)) + geom_line(data=df2,aes(y=T_N),color="red") + theme_bw() 
 }
 ```
 
 
 ```{r}
-courbe_epidemique <- function (simulteur=simulation1, generateur, N=100, nbInfecté = 1) { 
+courbe_epidemique <- function (simulateur=simulation1, generateur, N=100, nbInfecté = 1) { 
   library(ggplot2)
   set.seed(42);
   
-  df = simulateur(N, generateur, , nbInfecté)
+  df = simulateur(N, generateur, nbInfecté)
   ggplot(data=df, aes(x=Temps)) + geom_line(data=df,aes(y=nbInfecté),color="red") + theme_bw()
 }
 ```
 
-Réitérons notre simulation et observons l'évolution de $T_N$ en fonction de N sur un graphe 1D
+Ainsi comme a la question 1, réitérons notre simulation et observons l'évolution de $T_N$ en fonction de N sur un graphe 1D (en ligne)
 
   - SANS tore :
 
 ```{r}
-evolution_T_N(simulateur = simulation1, generateur = gene_arete_ligne, pas = 20, nbSamples = 10)
+evolution_T_N(simulateur = simulation1, generateur = gene_arete_ligne, pas = 20, nbSamples = 10) + ggtitle( label = "L'évolutions de $T_N$ en fonction de N - Generateur d'arête dans une ligne SANS tore")
 
 ```
 ==========
+To DELETE
+```{r}
+evolution_T_N(simulateur = simulation1, generateur = gene_arete_ligne, pas = 10, nbSamples = 10)
+
+```
 Avec un generateur pour un graphe coomplet la simualtion termine en un temps raisonnable tantdis que avec un generateur d'arete de graphe 1D, la simultion ne termine pas. 
 Au vu de la courbe (pas = 10, nbSamples = 10) à allure exponentielle, le résultat est confirmer
 ============
 Conclusion : 
 Plus la population est grande plus le temps $T_N$ est grand (il est par contre étrange que ce temps diminue a partir d'un certain seuil : Pour pas=10, nbsamples=10). Contrairement à la question 1 où l'évolution de $T_N$ paraissait logarithmique, ici la courbe a une allure exponentielle : cela reste cohérent avec le fait du nombre de connexion limité a $N-1$ contre $\sum_{i=1}^{N} N-i = \sum_{i=0}^{N-1} i = ((N-1) * N)/2 = o(N^2)$
-Pour le confirmer et se fixer sur les mêmes ordres de grandeurs qu'à la question 1, nous avons tenter d'augmenter le pas vers 100, et de laisser nombre de simulation à 10. Autant à la question 1 la simulation se terminait en un temps raisonnable, à celle-ci il elle ne se termine pas.
-Ce qui confirme notre hyspothèse sur l'allure exponentielle de la courbe.
+Pour le confirmer et se fixer sur les mêmes ordres de grandeurs qu'à la question 1, nous avons tenté d'augmenter le pas vers 100, et de laisser le nombre de simulations à 10. Autant à la question 1 la simulation se terminait en un temps raisonnable, à celle-ci il elle ne se termine pas.
+Ce qui confirme notre hypothèse sur l'allure exponentielle de la courbe avec les valeurs Pour pas=10, nbsamples=10.
 
 
 La courbe épidemique :
 ```{r}
-courbe_epidemique(simulteur = simulation1, generateur = gene_arete_ligne, N = 200)
+courbe_epidemique(simulateur = simulation1, generateur = gene_arete_ligne, N = 200) + ggtitle( label = "La courbe épidémique en fonction de N - Generateur d'arête dans une ligne SANS tore")
 ```
 
-Conlusion : La courbe épidémique est bien moins fulgurante que dans le cas du graphe complet. Ca se voit bien, et s'explique bien par le fait que tous les sommets sont de degrés au plus 2. On est tenté de dire qu'il s'agit d'une courbe logarithmique vu l'allure de la courbe a partir de zero. Il faudrait essayer avec un N > 100 afin d'en être plus sûr
+Conlusion : La courbe épidémique est bien moins fulgurante que dans le cas du graphe complet. Ca se voit bien, et s'explique bien par le fait que tous les sommets sont de degrés au plus 2. On est tenté de dire qu'il s'agit d'une courbe logarithmique vu l'allure de la courbe a partir de zero. Il faudrait essayer avec un N > 100 afin d'en être plus sûr.
+Ca se confirme pour un pas N = 200
 
 
   - AVEC tore :
@@ -221,16 +227,16 @@ Conlusion : La courbe épidémique est bien moins fulgurante que dans le cas du 
   Le tore n'influe pas grandement sur les résultats précédents car il ne s'agit que de l'ajout d'une arête 
   
 ```{r}
-evolution_T_N(simulateur = simulation1, generateur = gene_arete_ligne_tore, pas = 10, nbSamples = 10)
+evolution_T_N(simulateur = simulation1, generateur = gene_arete_ligne_tore, pas = 10, nbSamples = 10) + ggtitle( label = "L'évolutions de $T_N$ en fonction de N - Generateur d'arête dans une ligne avec tore")
 
 ```
 
 La courbe épidemique :
 ```{r}
-courbe_epidemique(simulteur = simulation1, generateur = gene_arete_ligne_tore, N = 100)
+courbe_epidemique(simulteur = simulation1, generateur = gene_arete_ligne_tore, N = 100) + ggtitle( label = "La courbe épidémique en fonction de N - Generateur d'arête dans une ligne avec tore")
 ```
 
-*Faisant varier le nombre de personnes infectées*
+*Faisant varier le nombre de personnes infectées dans le cas sans tore*
 
 ```{r}
 library(gridExtra)
@@ -244,16 +250,19 @@ g3 = evolution_T_N(simulateur = simulation1, generateur = gene_arete_ligne, pas 
 
 g4 = evolution_T_N(simulateur = simulation1, generateur = gene_arete_ligne, pas = 10, nbSamples = 50, coeff_pers_infecté = 3/4 ) + ggtitle("3/4 de la population infectée")
 
-grid.arrange(g1, g2, g3, g4, ncol=2, nrow=2)
+grid.arrange(g1, g2, g3, g4, ncol=2, nrow=2) + ggtitle( label = "Les différentes évolutions de $T_N$ en fonction de N selon l'effectif de la population infectée au temps 0 - Generateur d'arête dans une grille avec tore")
 ```
 
-La principale remarque qui se degage de porte sur le temps de l'infection totale de la population qui decroit quand proportion de personne infectée augmente.
+La principale remarque qui se degage porte sur le temps de l'infection totale de la population qui decroit quand proportion de personne infectée augmente.
 
 
 2. Lorsque le graphe est une grille 2D : 
  
  Pour notre choix de modélisation :
- On peut distinguer deux types d'arêtes : les arêtes verticales, et les arêtes horizontales (Voir l'exemple ci-contre) 
+
+ On peut distinguer deux types d'arêtes : les arêtes verticales, et les arêtes horizontales (Voir l'image ci-dessous) 
+ 
+ - Dans le cas SANS tore : 
  
  ![graphe](ps_dm2.png)
  
@@ -263,7 +272,6 @@ La principale remarque qui se degage de porte sur le temps de l'infection totale
     N*M : le nombre de sommets de la grille
     nbArete : le nombre d'arêtes $2NM-N-M$
  
- - Dans le cas SANS tore : 
   
   Le tirage uniforme dans une grille 2D se fait comme suit :
   
@@ -273,7 +281,6 @@ gene_arete_grille <- function (N, M = N) {
   nbArete = 2*N*M - N - M
   nbSommet = N * M
   x = floor(runif(n = 1, min = 1, max = nbArete + 1))
-  print(x)
   if ( x <= ((N-1)*M)) {
     #On est dans les arêtes horizontales
     x = x + floor((x-1)/(N-1))
@@ -291,60 +298,161 @@ gene_arete_grille <- function (N, M = N) {
 
 Simulation : 
 ===============
+VERIFICATION DU GENERATEUR
 ```{r}
 gene_arete_grille(3)
 ```
 
 ```{r}
 gene_arete_grille(3)
-df = data.frame(noArete =c(0,0), couple = c(0,0))
-for(i in 1:10) {
+df = data.frame(noArete =c(), x = c(), y=c())
+for(i in 1:1000) {
   res = gene_arete_grille(3)
-  df = rbind(df, data.frame(noArete = c(res[3], 999), couple = c(res[1], res[2])))
+  df = rbind(df, data.frame(noArete = res[3], x = res[1], y = res[2]))
 }
-df
+unique(df)
+
 ```
 ==============
+
 ```{r}
-evolution_T_N(simulateur = simulation1, generateur = gene_arete_grille, pas = 10, nbSamples = 10)
+set.seed(42)
+
+#Lancement de la simulation dans le cas d'une grille
+simulation2 <- function( N = 10, generateur_arete, nb_personnes_Infectées = 1, M = N) {
+
+  graphe = generateur_sommet_malade(N = N * M, initInfecté = nb_personnes_Infectées)
+  nbSommetInfecté = nb_personnes_Infectées;
+  T_N = 0;
+
+  df = data.frame(Temps = c(T_N), nbInfecté = c(nbSommetInfecté))
+  while ( nbSommetInfecté < N ) {
+    arete = generateur_arete(N, M);
+    x = arete[1];
+    y = arete[2];
+
+    if ((graphe[x] == 1) || (graphe[y] == 1)) {
+      
+      #Si x et y ne sont pas tous les deux infectés
+      if (! ((graphe[x] == 1) && (graphe[y] == 1)) ) { 
+        nbSommetInfecté = nbSommetInfecté + 1;
+      }
+      graphe[x] = 1;
+      graphe[y] = 1;
+    }
+    
+    T_N = T_N + 1;
+    df = rbind(df, data.frame(Temps = T_N, nbInfecté = nbSommetInfecté))
+  }
+  
+  df
+}
+
 ```
+
+```{r}
+evolution_T_N(simulateur = simulation2, generateur = gene_arete_grille, pas = 10, nbSamples = 7) + ggtitle(label = "Evolution de $T_N$ en fonction de N - Generateur d'arête dans une grille SANS tore")
+```
+
+Conclusions :
+L'évolution de $T_N$ en fonction de N est clairement exponentielle. 
+
 
 
   - Dans le cas AVEC tore : 
   
+   Sur une grille 3*3, voici schématiquement notre choix de modélisation : 
+   
+   ![graphe_tore](ps_dm2_tore.png)
+   
+   Nous sommes conscient que nous aurions pu procéder par une autre méthode que voici :
+   
+   Chaque sommet est en contact avec 4 arêtes, il suffit donc de prendre uniformément un nombre dans [1..N] où N est le nombre de sommets, puis prendre un nombre dans [1..4]: les nombres de 1 à 4 représentants respectivement : le sommet en haut, à droite, en bas et à gauche.
+C'est moins lourd à mettre en place et c'est surtout plus simple à comprendre, le tirage qu'on propose permet juste de faire un seul tirage parmi toutes les arêtes disponibles. 
+Le but de la modélisation étant d'associer chaque numéro d'arête à un couple de sommet (x,y) que l'on peut calculer à partir du numéro de l'arête.
+   
+   
   Le tirage uniforme se fait comme suit :
   
 ```{r}
-gene_arete_grille_tore <- function (N, M) {
-  nbArete = 2*N*M - N - M
-  nbSommet = N * M
-  x = floor(runif(n = 1, min = 1, max = nbArete + 1))
+gene_arete_grille_tore <- function (N = 3, M = N) {
+  nbArete = 2*N*M
+  a = floor(runif(n = 1, min = 1, max = nbArete + 1))
   
-  if ( x <= (N*M)) {
+  if ( a <= (N*M)) {
     #On est dans les arêtes horizontales
-    if ((x%N) == 0) {
-      #On est sur la colonne la plus a droite de la grille
-      y = ceiling(x/N)
+    if ((a %% N) == 0) {
+      #On est dans une arete du tore
+      x = a
+      y = x + 1 - N
+      
     } else {
-      y = x + 1  
+      x = a
+      y = x + 1
     }
     
   } else {
     #On est dans les arêtes verticales
-    x = x - N*M
-    if (x > (2*M*N - N)) {
-      #On est sur la ligne la plus en bas de la grille
-      y = x %% N
+    #On aura remarqué que toutes arêtes verticale ont leur sommet "du coté haut" égale à a - N*M
+    if ( a <= (2*M*N - N) ) {
+      #On n'est pas dans une arete du tore
+      x = a - N*M
+      y = x + N
     } else {
-        y = x + N      
+        x = a - N*M
+        y = x %% N
+        if ( y == 0 ) {
+          y = N
+        }
     }
   }
   
-  c(x,y)
+  c(x,y, a)
 }
 
 ```
 
+===============
+Test du generateur d'arete d'une grille avec tore OK
+```{r}
+df = data.frame(noArete =c(), x = c(), y=c())
+for(i in 1:1000) {
+  res = gene_arete_grille_tore(3)
+  df = rbind(df, data.frame(noArete = res[3], x = res[1], y = res[2]))
+}
+unique(df)
 
+```
+==============
+
+
+```{r}
+evolution_T_N(simulateur = simulation2, generateur = gene_arete_grille_tore, pas = 10, nbSamples = 7) + ggtitle( label = "Evolution de $T_N$ en fonction de N² - Generateur d'arête dans une grille avec tore")
+```
+
+Conclusions : 
+
+Nous remarquons que la pente de la courbe dans une grille avec tore est plus ardue que celle sans tore, ce qui concorde tout à fait avec ce à quoi on s'attendait du fait d'un plus de connexions
+
+*Faisant varier le nombre de personnes infectées dans une grille avec tore*
+
+```{r}
+library(gridExtra)
+library(ggplot2)
+
+g1 = evolution_T_N(simulateur = simulation2, generateur = gene_arete_grille_tore, pas = 10, nbSamples = 7, nbInfecté = 1 ) + ggtitle("1 personne infectée")
+
+g2 = evolution_T_N(simulateur = simulation2, generateur = gene_arete_grille_tore, pas = 10, nbSamples = 7, coeff_pers_infecté = 1/4 ) + ggtitle("1/4 de la popluation infectée")
+
+g3 = evolution_T_N(simulateur = simulation2, generateur = gene_arete_grille_tore, pas = 10, nbSamples = 7, coeff_pers_infecté = 1/2 ) + ggtitle("1/2 de la population infectée")
+
+g4 = evolution_T_N(simulateur = simulation2, generateur = gene_arete_grille_tore, pas = 10, nbSamples = 7, coeff_pers_infecté = 3/4 ) + ggtitle("3/4 de la population infectée")
+
+grid.arrange(g1, g2, g3, g4, ncol=2, nrow=2) + ggtitle( label = "Les différentes évolutions de $T_N$ en fonction de N² selon l'effectif de la population infectée au temps 0 - Generateur d'arête dans une grille avec tore")
+```
+
+Nous remarquerons que les temps T_N diminuent quand la population initialement infectée est plus grande. 
+La taille de la grille est en $N^2$.
+Des comportements étranges s'observent sur les figures 1/4 et 3/4 de la population infectée : une décroissance de la courbe qui pourrait s'expliquer par le manque d'echantillants sur la partie non infectée de la population ?
 
 **Question 3**
