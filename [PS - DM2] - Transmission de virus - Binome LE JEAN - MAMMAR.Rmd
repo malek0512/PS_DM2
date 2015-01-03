@@ -506,7 +506,7 @@ repeat
 			}
 		i = i + 1
 		}
-	if(i>100) # on a parcourue tout les sommets avec le parcours en lageur, donc le graphe est connexe
+	if(i>N) # on a parcourue tout les sommets avec le parcours en lageur, donc le graphe est connexe
 		{break}
 	}
 
@@ -521,12 +521,18 @@ generateur_erdos_renyi()
 
 ```
 
+```{r}
+
+generateur_erdos_renyi(10,1)
+```
+
 
 ```{r}
 simulation_3 <- function(N = 10, p = 0.5)
 {
-  
+
 	graphe = generateur_erdos_renyi(N,p)
+  
 	nb_arrete=0
 	for(i in 1:N)
 		{
@@ -561,27 +567,33 @@ simulation_3 <- function(N = 10, p = 0.5)
 	sommets[premier_infecter] = 1
 	
 	T = 0
-	
 	while (nb_infecter < N)
 	{
 		#tirage dans 1 .. nb_arrete
 		x = floor(runif(n=1, min = 1, max = nb_arrete+1))
-		if(arretesG[x] == 1 && arretesD[x] == 0)
+    
+		if(sommets[arretesG[x]] == 1 && sommets[arretesD[x]] == 0)
 			{ 
-        arretesD[x] = 1
+        sommets[arretesD[x]] = 1
 			  nb_infecter= nb_infecter +1
       }
-		else if (arretesD[x] == 1 && arretesG[x] == 0)
+		else if (sommets[arretesD[x]] == 1 && sommets[arretesG[x]] == 0)
 			{
-      arretesG[x] = 1
+      sommets[arretesG[x]] = 1
 			nb_infecter= nb_infecter +1
       }
 		T = T+1
 	}
 	T	
 }
-```
 
-```{r}
 simulation_3(N = 10, p = 1)
 ```
+
+
+```{r}
+
+simulation_3(N = 100, p = 0.01)
+
+```
+
