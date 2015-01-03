@@ -566,14 +566,14 @@ simulation_3 <- function(N = 10, p = 0.5)
 	{
 		#tirage dans 1 .. nb_arrete
 		x = floor(runif(n=1, min = 1, max = nb_arrete+1))
-		if(arretesG[x] == 1 && arretesD[x] == 0)
+		if(sommets[arretesG[x]] == 1 && sommets[arretesD[x]] == 0)
 			{ 
-        arretesD[x] = 1
+        sommets[arretesD[x]] = 1
 			  nb_infecter= nb_infecter +1
       }
-		else if (arretesD[x] == 1 && arretesG[x] == 0)
+		else if (sommets[arretesD[x]] == 1 && sommets[arretesG[x]] == 0)
 			{
-      arretesG[x] = 1
+      sommets[arretesG[x]] = 1
 			nb_infecter= nb_infecter +1
       }
 		T = T+1
