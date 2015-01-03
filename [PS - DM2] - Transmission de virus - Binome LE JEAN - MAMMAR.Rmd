@@ -4,6 +4,11 @@ output: html_document
 ---
 **Binôme : Malek MAMMAR & Alexandre LE JEAN**
 
+Nous soussinés MAMMAR et LE JEAN déclarons sur l'honneur que ce rapport est le fruit d'un travail personnel, en binôme, que nous n'avons contrefait, ni falsifié, ni copié tout ou partie de l'oeuvre d'autrui afin de le faire passer pour notre.
+Toutes les sources d'information utilisées et les citations d'auteur ont été mentionnées conformément au usages en vigueur.
+Nous sommes conscients que le fait de ne pas citer une source ou de ne pas la citer clairement et complètement est constitutif de plagiat, que le plagiat est considéré comme une faute grave au sein de l'université, pouvant sévèrement sanctionnée par la loi.
+
+
 Dans ce DM nous nous efforcerons cette fois-ci a fournir une description plus détailler de notre démarche suite a la remarque de Arnaud Legrand.
 
 **Question 1**
