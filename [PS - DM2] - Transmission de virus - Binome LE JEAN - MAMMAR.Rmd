@@ -497,13 +497,7 @@ repeat
 		{
 		for(j in i : N)
       {
-      print("tab i ")
-      print(tab[i])
-      print("graphe de tab i, N ")
-      print(graphe[tab[i],N])
-      print("sommet j ")
-      print(sommet[j])
-      if(graphe[tab[i],N] == 1 && sommet[j] != 1)
+        if(graphe[tab[i],N] == 1 && sommet[j] != 1)
 				{
 				tab[x] = j
 				x = x + 1
@@ -531,6 +525,7 @@ generateur_erdos_renyi()
 ```{r}
 simulation_3 <- function(N = 100, p = 0.5)
 {
+  
 	graphe = generateur_erdos_renyi(N,p)
 	nb_arrete=0
 	for(i in 1:N)
@@ -543,8 +538,8 @@ simulation_3 <- function(N = 100, p = 0.5)
         }
 			}
 		}
-	arretesG = array(0,a)
-	arretesD = array(0,a)
+	arretesG = array(0,nb_arrete)
+	arretesD = array(0,nb_arrete)
 	x=1
 	for(i in 1:N)
 		{for(j in i+1 : N)
