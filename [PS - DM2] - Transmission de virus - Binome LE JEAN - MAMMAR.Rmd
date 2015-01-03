@@ -470,7 +470,8 @@ repeat
 		{for ( j in i+1:N)
 			{x = runif(n=1)
 			if(x<1/p)
-				{graphe[i][j] = 1}
+				{graphe[i][j] = 1
+				graphe[j][i] = 1}
 			}
 		}
 	# on vérifie que le graphe est connexe
@@ -498,5 +499,29 @@ repeat
 	}
 
 	graphe
+}
+```
+
+```{r}
+simulation_3 <- function(N = 100, p = 0.5)
+{
+	graphe = generateur_erdos_renyi(N,p)
+	nb_arrete=0
+	for(i in 1:N)
+		{for(j in i+1 : N)
+			{if(graphe[i][j] == 1)
+				{nb_arrete = nb_arrete +1}
+			}
+		}
+	arretes = array(0,a)
+	x=1
+	for(i in 1:N)
+		{for(j in i+1 : N)
+			{if(graphe[i][j] == 1)
+				{arretes[x]
+				x=x+1}
+			}
+		}
+	
 }
 ```
