@@ -468,54 +468,54 @@ Des comportements étranges s'observent sur les figures 1/4 et 3/4 de la populat
 # graphe est la matrice d'ajdacence du graphe connexe générer
 generateur_erdos_renyi <- function(N = 10, p = 0.5)
 {
-	graphe = matrix(0, nrow = N, ncol = N)
+    graphe = matrix(0, nrow = N, ncol = N)
 repeat
 {
-	for(i in 1:N)
-	{
+    for(i in 1:N)
+    {
     for ( j in i+1:N)
-			{
+            {
       if (j <= N) { #Sinon j va jusqu a N+1
         x = runif(n=1)
-  			if(x<p)
-  			{
+            if(x<p)
+            {
           graphe[i,j] = 1
-  				graphe[j,i] = 1
+                graphe[j,i] = 1
         }
       }
-		}
-	}
-	# on vérifie que le graphe est connexe
-	sommet = array(0,N) #1 si les sommets sont decouvert par le pacour, 0 sinon
-	tab = array(0,N) #liste des sommets a parcourir
-	tab[1] = 1
-	sommet[1] = 1
-	n = 1 #nombre de sommet traiter
-	x = 1 #indice de tab a traiter
-	cpt = 2 #indice de la prochaine case de tab libre
-	
-	while( n <= N && tab[x] != 0 )
-		{
-		for(j in tab[x] : N)
-      		{
-	      		if(j <= N)
-	      		{
-	      			if(graphe[tab[x],j] == 1 && sommet[j] != 1)
-				{
-					tab[cpt] = j
-					cpt = cpt + 1
-					sommet[j] = 1
-					n = n+1
-				}
-			}
-		}
-		x = x + 1
-		}
-	if(n>100) # on a parcourue tout les sommets avec le parcours en lageur, donc le graphe est connexe
-		{break}
-	}
+        }
+    }
+    # on vérifie que le graphe est connexe
+    sommet = array(0,N) #1 si les sommets sont decouvert par le pacour, 0 sinon
+    tab = array(0,N) #liste des sommets a parcourir
+    tab[1] = 1
+    sommet[1] = 1
+    n = 1 #nombre de sommet traiter
+    x = 1 #indice de tab a traiter
+    cpt = 2 #indice de la prochaine case de tab libre
 
-	graphe
+    while( n < N && x <= N && tab[x] != 0 )
+        {
+        for(j in tab[x] +1 : N)
+            {
+                if(j <= N)
+                {
+                    if(graphe[tab[x],j] == 1 && sommet[j] != 1)
+                {
+                    tab[cpt] = j
+                    cpt = cpt + 1
+                    sommet[j] = 1
+                    n = n+1
+                }
+            }
+        }
+        x = x + 1
+        }
+    if(n==N) # on a parcourue tout les sommets avec le parcours en lageur, donc le graphe est connexe
+        {break}
+    }
+
+    graphe
 }
 ```
 
