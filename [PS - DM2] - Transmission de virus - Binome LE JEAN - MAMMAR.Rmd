@@ -456,3 +456,47 @@ La taille de la grille est en $N^2$.
 Des comportements étranges s'observent sur les figures 1/4 et 3/4 de la population infectée : une décroissance de la courbe qui pourrait s'expliquer par le manque d'echantillants sur la partie non infectée de la population ?
 
 **Question 3**
+
+```{r}
+# N : nombre de sommet
+# p : parametre de la loi de B
+# graphe est la matrice d'ajdacence du graphe connexe générer
+generateur_erdos_renyi <- function(N = 100, p = 0.5)
+{
+	graphe = array(N,N)
+repeat
+{
+	for(i in 1:N)
+		{for ( j in i+1:N)
+			{x = runif(n=1)
+			if(x<1/p)
+				{graphe[i][j] = 1}
+			}
+		}
+	# on vérifie que le graphe est connexe
+	sommet = array(0,N) #1 si les sommets sont decouvert par le pacour, 0 sinon
+	tab = array(0,N) #liste des sommets a parcourir
+	tab[1] = 1
+	sommet[1] = 1
+	i = 1 #nombre de sommet traiter
+	x = 2 #prochaine case libre dans tab
+	
+	while( i <= 100 && tab[i] != 0 )
+		{
+		for(j in i : N)
+			{if(graphe[tab[i]][N] == 1 && sommet[j] != 1)
+				{
+				tab[x] = j
+				x = x + 1
+				sommet[j] = 1
+				}
+			}
+		i = i + 1
+		}
+	if(i>100) # on a parcourue tout les sommets avec le parcours en lageur, donc le graphe est connexe
+		{break}
+	}
+
+	graphe
+}
+```
