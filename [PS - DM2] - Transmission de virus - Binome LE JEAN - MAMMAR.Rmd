@@ -528,9 +528,20 @@ generateur_erdos_renyi(10,1)
 
 
 ```{r}
-simulation_3 <- function(N = 10, p = 0.5)
+simulation_3 <- function(N = 10, p = 0.5, nbInfecté = 1, portionInfectée = 0)
 {
 
+  #fonction auxiliaire permettant de modifier le nombre de personnes infectés initialement
+  infection <- function () {
+    if (portionInfectée <= 1 && portionInfectée != 0) {
+      floor(N * portionInfectée)
+    } else if (nbInfecté <= N) {
+      nbInfecté
+    } else {
+      N
+    }
+  }
+  
 	graphe = generateur_erdos_renyi(N,p)
   
 	nb_arrete=0
@@ -563,8 +574,15 @@ simulation_3 <- function(N = 10, p = 0.5)
 	#simulation normale avec
 	nb_infecter = 1
 	sommets = array(0,N)
-	premier_infecter = floor(runif(n = 1 , min = 1, max = N+1))
-	sommets[premier_infecter] = 1
+  for(i in 1:nbInfecté()){
+    repeat {
+      personne_infecté = floor(runif(n = 1 , min = 1, max = N+1))
+      if (sommets[personne_infecté] != 1) {
+        break
+      }
+    }
+    sommets[personne_infecté] = 1
+  }
 	
 	T = 0
 	while (nb_infecter < N)
@@ -590,6 +608,10 @@ simulation_3 <- function(N = 10, p = 0.5)
 simulation_3(N = 10, p = 1)
 ```
 
+
+```{r}
+generateur_erdos_renyi(N = 10, p = 0.5)
+```
 
 ```{r}
 
