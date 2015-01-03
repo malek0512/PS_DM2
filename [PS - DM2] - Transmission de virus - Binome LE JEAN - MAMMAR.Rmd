@@ -464,21 +464,27 @@ Des comportements étranges s'observent sur les figures 1/4 et 3/4 de la populat
 
 ```{r}
 # N : nombre de sommet
-# p : parametre de la loi de B
+# p : parametre de la loi de B
 # graphe est la matrice d'ajdacence du graphe connexe générer
 generateur_erdos_renyi <- function(N = 100, p = 0.5)
 {
-	graphe = array(N,N)
+	graphe = matrix(0, nrow = N, ncol = N)
 repeat
 {
 	for(i in 1:N)
-		{for ( j in i+1:N)
-			{x = runif(n=1)
-			if(x<p)
-				{graphe[i][j] = 1
-				graphe[j][i] = 1}
-			}
+	{
+    for ( j in i+1:N)
+			{
+      if (j <= N) { #Sinon j va jusqu a N+1
+        x = runif(n=1)
+  			if(x<p)
+  			{
+          graphe[i,j] = 1
+  				graphe[j,i] = 1
+        }
+      }
 		}
+	}
 	# on vérifie que le graphe est connexe
 	sommet = array(0,N) #1 si les sommets sont decouvert par le pacour, 0 sinon
 	tab = array(0,N) #liste des sommets a parcourir
@@ -487,10 +493,17 @@ repeat
 	i = 1 #nombre de sommet traiter
 	x = 2 #prochaine case libre dans tab
 	
-	while( i <= 100 && tab[i] != 0 )
+	while( i <= 100 && tab[i] != 0 )
 		{
 		for(j in i : N)
-			{if(graphe[tab[i]][N] == 1 && sommet[j] != 1)
+      {
+      print("tab i ")
+      print(tab[i])
+      print("graphe de tab i, N ")
+      print(graphe[tab[i],N])
+      print("sommet j ")
+      print(sommet[j])
+      if(graphe[tab[i],N] == 1 && sommet[j] != 1)
 				{
 				tab[x] = j
 				x = x + 1
@@ -507,15 +520,27 @@ repeat
 }
 ```
 
+
+
+```{r}
+generateur_erdos_renyi()
+
+```
+
+
 ```{r}
 simulation_3 <- function(N = 100, p = 0.5)
 {
 	graphe = generateur_erdos_renyi(N,p)
 	nb_arrete=0
 	for(i in 1:N)
-		{for(j in i+1 : N)
-			{if(graphe[i][j] == 1)
-				{nb_arrete = nb_arrete +1}
+		{
+      for(j in i+1 : N)
+			{
+        if (j <= N) {
+          if(graphe[i,j] == 1)
+  				{nb_arrete = nb_arrete +1}
+        }
 			}
 		}
 	arretesG = array(0,a)
@@ -523,10 +548,14 @@ simulation_3 <- function(N = 100, p = 0.5)
 	x=1
 	for(i in 1:N)
 		{for(j in i+1 : N)
-			{if(graphe[i][j] == 1)
-				{arretesG[x] = i
-				arretesD[x] = j
-				x=x+1}
+			{
+        if (j <= N) {
+          if(graphe[i,j] == 1)
+    				{arretesG[x] = i
+    				arretesD[x] = j
+    				x=x+1
+          }
+        }
 			}
 		}
 	#simulation normale avec
@@ -552,3 +581,8 @@ simulation_3 <- function(N = 100, p = 0.5)
 	T	
 }
 ```
+
+```{r}
+simulation_3()
+```
+
