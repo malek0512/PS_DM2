@@ -14,9 +14,9 @@ Dans ce DM nous nous efforcerons cette fois-ci a fournir une description plus d�
 **Question 1**
 
 Choix de modélisation : 
-On souhaite tirer uniformément sur notre ensemble d'arêtes. Pour cela avons besoin d'un tableau contenant 1 ou 0 si respectivement le sommet d'indice i est infecté ou non.
+On souhaite tirer uniformément sur notre ensemble d'arêtes. Pour cela nous avons besoin d'un tableau contenant 1 ou 0 si respectivement le sommet d'indice i est infecté ou non.
 
-Dans cette question on est en présence d'un graphe complet, modélisation ci-dessus à elle seule suffit car quelque soit le couple de sommets tirés il existe une forcément une arête les reliants.
+Dans cette question on est en présence d'un graphe complet, la modélisation ci-dessus à elle seule suffit car quelque soit le couple de sommets tiré il existe une forcément une arête les reliants.
 
 ```{r}
 #Cette fonction renvoie un tableau de sommets dont 1 sommet est infecté
@@ -120,7 +120,7 @@ ggplot(data=df, aes(x=Temps)) + geom_line(data=df,aes(y=nbInfecté),color="red")
 ```
 
 Conclusion:
-On remarque la contamination évolue de manière exponentielle dès l'infection d'une personne au temps 0.
+On remarque que la contamination évolue de manière exponentielle dès l'infection d'une personne au temps 0.
 En l'espace de 4000 unités de temps la moitié de la population est déjà infectée et 2000 unités de temps plus tards toute la population est quasi infectée.
 On ne que rester stupéfait devant la rapidité de l'infection dans un graphe connexe.
 
@@ -130,9 +130,9 @@ Graphe ligne 1D et grille 2D
 
 1. Lorsque le graphe est une ligne :
 
-Tout d'abord nous définissons les fonction qui nous serons nécessaires : 
+Tout d'abord nous définissons les fonction qui nous seront nécessaires : 
 
-Cette fonction tire uniformement une arête de notre graphe en ligne
+Cette fonction tire uniformément une arête de notre graphe en ligne
 ```{r}
 #Cette fonction tire uniformement une arete de notre graphe en ligne
 gene_arete_ligne <- function (N = 10) {
@@ -142,7 +142,7 @@ gene_arete_ligne <- function (N = 10) {
 }
 ```
 
-Cette fonction tire uniformement une arete de notre graphe en ligne avec tore
+Cette fonction tire uniformément une arete de notre graphe en ligne avec tore
 ```{r}
 #Cette fonction tire uniformement une arete de notre graphe en ligne avec tore
 gene_arete_ligne_tore <- function (N = 10) {
@@ -197,7 +197,7 @@ courbe_epidemique <- function (simulateur=simulation1, generateur, N=100, nbInfe
 
 Ainsi comme à la question 1, réitérons notre simulation et observons l'évolution de $T_N$ en fonction de N sur un graphe 1D (en ligne)
 
-  - SANS tore :
+  - Grahe 1D, SANS tore :
 
 ```{r}
 #evolution_T_N(simulateur = simulation1, generateur = gene_arete_ligne, pas = 20, nbSamples = 10) + ggtitle( label = "L'évolutions de $T_N$ en fonction de N - Generateur d'arête dans une ligne SANS tore")
@@ -206,9 +206,9 @@ Ainsi comme à la question 1, réitérons notre simulation et observons l'évolu
 
 
 Conclusion : 
-Plus la population est grande plus le temps $T_N$ est grand (il est par contre étrange que ce temps diminue a partir d'un certain seuil : Pour pas=10, nbsamples=10). Contrairement à la question 1 où l'évolution de $T_N$ paraissait logarithmique, ici la courbe a une allure exponentielle : cela reste cohérent avec le fait du nombre de connexion limité a $N-1$ contre $\sum_{i=1}^{N} N-i = \sum_{i=0}^{N-1} i = ((N-1) * N)/2 = o(N^2)$
+Plus la population est grande plus le temps $T_N$ est grand (il est par contre étrange que ce temps diminue à partir d'un certain seuil : Pour pas=10, nbsamples=10). Contrairement à la question 1 où l'évolution de $T_N$ paraissait logarithmique, ici la courbe a une allure exponentielle : cela reste cohérent avec le fait du nombre de connexion limité a $N-1$ contre $\sum_{i=1}^{N} N-i = \sum_{i=0}^{N-1} i = ((N-1) * N)/2 = o(N^2)$
 Pour le confirmer et se fixer sur les mêmes ordres de grandeurs qu'à la question 1, nous avons tenté d'augmenter le pas vers 100, et de laisser le nombre de simulations (nbSamples) à 10. Autant à la question 1 la simulation se terminait en un temps raisonnable, à celle-ci il elle ne se termine pas.
-Ce qui confirme notre hypothèse sur l'allure exponentielle de la courbe avec les valeurs Pour pas=10, nbsamples=10.
+Ce qui nous supposons confirme notre hypothèse sur l'allure exponentielle de la courbe avec les valeurs Pour pas=10, nbsamples=10.
 
 
 La courbe épidemique :
@@ -216,11 +216,13 @@ La courbe épidemique :
 #courbe_epidemique(simulateur = simulation1, generateur = gene_arete_ligne, N = 200) + ggtitle( label = "La courbe épidémique en fonction de N - Generateur d'arête dans une ligne SANS tore")
 ```
 
-Conlusion : La courbe épidémique est bien moins fulgurante que dans le cas du graphe complet. Ca se voit bien, et s'explique bien par le fait que tous les sommets sont de degrés au plus 2. On est tenté de dire qu'il s'agit d'une courbe logarithmique vu l'allure de la courbe a partir de zero. Il faudrait essayer avec un N > 100 afin d'en être plus sûr.
+Conlusion : 
+
+La courbe épidémique est bien moins fulgurante que dans le cas du graphe complet. Cela se voit bien sur le graphe ci-dessous, et s'explique bien par le fait que tous les sommets sont de degrés au plus 2. On est tenté de dire qu'il s'agit d'une courbe logarithmique vu l'allure de la courbe a partir de zero. Il faudrait essayer avec un N > 100 afin d'en être plus sûr.
 Ca se confirme pour un pas N = 200
 
 
-  - AVEC tore :
+  - Grahe 1D, AVEC tore :
     
 ```{r}
 #evolution_T_N(simulateur = simulation1, generateur = gene_arete_ligne_tore, pas = 10, nbSamples = 10) + ggtitle( label = "L'évolutions de $T_N$ en fonction de N - Generateur d'arête dans une ligne avec tore")
@@ -232,7 +234,7 @@ La courbe épidemique :
 #courbe_epidemique(simulateur = simulation1, generateur = gene_arete_ligne_tore, N = 100) + ggtitle( label = "La courbe épidémique en fonction de N - Generateur d'arête dans une ligne avec tore")
 ```
 
-  On remarquera que le tore n'influe pas grandement sur les résultats précédents car il ne s'agit que de l'ajout d'une arête. Ceci se constate par comparaison des graphes ci-dessous aux graphes avec tore.
+  On remarquera que le tore n'influe pas grandement sur les résultats précédents car il ne s'agit que de l'ajout d'une arête. 
 
 
 Maintenant observons ce qui passe lorsque nous faisons varier le nombre de personnes infectées dans le cas sans tore
@@ -257,19 +259,20 @@ Comme attendu, le temps de l'infection totale de la population decroit quand la 
 
 2. Lorsque le graphe est une grille 2D : 
  
- Pour notre choix de modélisation nous avons joint deux shéma refletons notre vision d'un graphe dans le cas avec ET sans tore :
+ Pour notre choix de modélisation nous avons joint deux schémas reflétants notre vision d'un graphe dans le cas avec ET sans tore :
 
- On choisit de distinguer deux types d'arêtes : les arêtes verticales (en rouge), et les arêtes horizontales (en bleu) (Voir l'image ci-dessous). Le but de ces représentations étant de retrouver les sommets associés à l'arête tirée aléatoirement.
+ On choisit de distinguer deux types d'arêtes : les arêtes verticales (en bleu), et les arêtes horizontales (en rouge) (Voir l'image ci-dessous). Le but de ces représentations étant de retrouver les sommets associés à l'arête tirée aléatoirement.
  
  - Dans le cas SANS tore : 
  
  ![graphe](ps_dm2.png)
  
  Soient les variables suivantes, dans l'algorithme de générateur de graphe en grille : 
-    M : la hauteur de la grille
-    N : la largeur de la grille
-    N*M : le nombre de sommets de la grille
-    nbArete : le nombre d'arêtes $2NM-N-M$
+ 
+    - M : la hauteur de la grille
+    - N : la largeur de la grille
+    - N*M : le nombre de sommets de la grille
+    - nbArete : le nombre d'arêtes $2NM-N-M$
  
   
   Le tirage uniforme dans une grille 2D se fait comme suit :
@@ -338,7 +341,7 @@ simulation2 <- function( N = 10, generateur_arete, nb_personnes_Infectées = 1, 
 
 Conclusions :
 
-L'évolution de $T_N$ en fonction de N est la aussi exponentielle tout comme dans le graphe 1D. Le manque d'arêtes entre les sommets influe grandement sur la propagation du virus.
+L'évolution de $T_N$ en fonction de N est là aussi exponentielle tout comme dans le graphe 1D. Le manque d'arêtes entre les sommets influe grandement sur la propagation du virus.
 
 
 
@@ -422,9 +425,9 @@ library(ggplot2)
 #grid.arrange(g1, g2, g3, g4, ncol=2, nrow=2) + ggtitle( label = "Les différentes évolutions de $T_N$ en fonction de N² selon l'effectif de la population infectée au temps 0 - Generateur d'arête dans une grille avec tore")
 ```
 
-NB : La taille de la grille est en $N^2$, contrairement a ce qui est indiqué sur la légende.
+NB : La taille de la grille (le nombre de sommet) est en $N^2$, contrairement à ce qui est indiqué sur la légende.
 
-Nous remarquerons que les temps $T_N$ diminuent quand la population initialement infectée est plus grande, rien d'étonnant. Cela dit, des comportements étranges s'observent sur les figures $1/4$ et $3/4$ de la population infectée : une décroissance de la courbe qui nous pensons pourrait s'expliquer par le manque d'échantillants sur la partie non infectée de la population (Nous n'en sommes pas certains)
+Nous remarquons que les temps $T_N$ diminuent quand la population initialement infectée est plus grande, rien d'étonnant. Cela dit, des comportements étranges s'observent sur les figures $1/4$ et $3/4$ de la population infectée : une décroissance de la courbe qui nous pensons pourrait s'expliquer par le manque d'échantillants sur la partie non infectée de la population (Nous n'en sommes pas certains)
 
 
 **Question 3**
@@ -634,8 +637,8 @@ simulation3_evolution_nbArete_et_p <- function (N = 10, seuilProbaMin = 0.5, pas
 #simulation3_evolution_nbArete_et_p (N = 10, seuilProbaMin = 0.1, pas = 0.01)
 ```
 
-Il est très etrange que le nombre d'arete pour les probabilités tres faibles soient aussi haut. Si je prend le nombre d'arete en Pi = 0.15 (le pic depassant la barre des 40 aretes) Cela veut dire que sur 40 tirage aleatoire j'ai eut des nombres inferieur a 0,15. 
-Peut être vient du fait que a force de rejeter tous les graphes non connexe, on finit par avoir des sequence aussi improbables ?
+Il est très étrange que le nombre d'arête pour les probabilités très faibles soient aussi haut. Si je prend le nombre d'arete en Pi = 0.15 (le pic depassant la barre des 40 aretes) Cela veut dire que sur 40 tirage aleatoire j'ai eut des nombres inferieur a 0,15. 
+Peut être vient du fait que a force de rejeter tous les graphes non connexeq, on finit par avoir des sequence aussi improbables ?
 
 
 
